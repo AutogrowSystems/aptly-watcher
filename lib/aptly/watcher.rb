@@ -41,7 +41,7 @@ module Aptly
     # run the watcher with the given config
     def run(config)
       notifier   = INotify::Notifier.new
-      aptly      = Aptly::Watcher::AptlyShim.new(distrib, repos, conf)
+      aptly      = Aptly::Watcher::AptlyShim.new(config[:distrib], config[:repos], config[:conf])
       dispatcher = Aptly::Watcher::EventDispatcher.new(aptly)
 
       # setup a notifier for each repo
