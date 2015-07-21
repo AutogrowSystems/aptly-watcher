@@ -41,10 +41,13 @@ module Aptly
         end
       end
 
-      # log into redis so we can pick it up in the DMS
       def log(level, message)
-        redis_log(level, message)          if @config[:redis_log] != false
-        logger.send(level.to_sym, message) if @config[:log]       != false
+        message.chomp.lines.each_with_index do |line, index|  # multi line logging
+          line.chomp!
+          line = "  #{line}" unless index.zero?
+          redis_log(level, line)          if @config[:redis_log] != false
+          logger.send(level.to_sym, line) if @config[:log]       != false
+        end
       end
 
       def redis_log(level, message)
