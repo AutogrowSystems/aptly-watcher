@@ -5,28 +5,31 @@ require 'logger'
 require 'fileutils'
 require 'slop'
 
-opts = Slop.parse do
-  on :config=, :c, "Location of the config file"
+opts = Slop.parse strict: true, help: true do
+  on :c, :config=, "Location of the config file"
 end
 
-abort "ERROR: Must specify config file" unless opts.config
+abort "ERROR: Must specify config file" unless opts[:config]
 
 # Try to parse the config file
 begin
-  config = Aptly::Watcher::Config.parse(opts.config)
+  config = Aptly::Watcher::Config.parse(opts[:config])
+  Aptly::Watcher.setup(config)
 rescue ArgumentError => e
-  Aptly::Watcher.log(:error, e.message)
   abort "ERROR: #{e.message}"
 end
-
-Aptly::Watcher.setup(config)
 
 # remove pidfile on exit
 Signal.trap("EXIT") do
   FileUtils.rm config[:pidfile]
 end
 
-Aptly::Watcher.log :info, "Starting the watcher on pid #{Process.pid}"
-File.write(config[:pidfile], Process.pid)
-
-Aptly::Watcher.run(config)
+begin
+  Aptly::Watcher.log :info, "Starting the watcher on pid #{Process.pid}"
+  File.write(config[:pidfile], Process.pid)
+  Aptly::Watcher.run(config)
+rescue ArgumentError, StandardError => e
+  Aptly::Watcher.log :fatal, e.message
+  # abort "ERROR: #{e.message}"
+  raise e
+end
