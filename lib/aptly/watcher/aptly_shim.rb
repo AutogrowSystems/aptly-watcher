@@ -17,12 +17,14 @@ module Aptly
           next if repo_list.include? repo  # avoid raising an error
           output = `aptly repo create #{distrib} #{config} #{component(repo)} #{repo} 2>&1`
           raise StandardError, "Failed to create repo #{repo}\n#{output}" unless $?.success?
+          Aptly::Watcher.log :info, "Created repo #{@name}/#{repo}"
         end
 
         # publish the repos for the first time (empty)
         unless `aptly publish list --raw`.include? @name # avoid raising an error
           output = `aptly publish repo #{config} #{distrib} #{component(:all)} #{@components.join(' ')} 2>&1`
           raise StandardError, "Failed to publish #{@name} for the first time\n#{output}" unless $?.success?
+          Aptly::Watcher.log :info, "Published repos #{@components.join('/')} for #{@name}"
         end
       end
 
