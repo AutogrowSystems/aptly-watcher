@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require 'aptly/watcher'
+require 'logger'
+require 'fileutils'
+require 'slop'
+
+opts = Slop.parse do
+  on :config=, :c, "Location of the config file"
+end
+
+abort "ERROR: Must specify config file" unless opts.config
+
+# Try to parse the config file
+begin
+  config = Aptly::Watcher::Config.parse(opts.config)
+rescue ArgumentError => e
+  Aptly::Watcher.log(:error, e.message)
+  abort "ERROR: #{e.message}"
+end
+
+Aptly::Watcher.setup(config)
+
+# remove pidfile on exit
+Signal.trap("EXIT") do
+  FileUtils.rm config[:pidfile]
+end
+
+Aptly::Watcher.log :info, "Starting the watcher on pid #{Process.pid}"
+File.write(config[:pidfile], Process.pid)
+
+Aptly::Watcher.run(config)
