@@ -6,6 +6,7 @@ module Aptly
       class << self
 
         def parse(config_file)
+          raise ArgumentError, "Config file not found: #{config_file}" unless File.exist?(config_file)
           config = YAML.load_file(config_file)
           valid_config!(config)
           config = parse_tildes(config)
@@ -13,6 +14,7 @@ module Aptly
         end
 
         def valid_config!(config)
+          raise ArgumentError, "Config file was empty"              unless config
           raise ArgumentError, "Config file missing :pidfile:"      unless config[:pidfile]
           raise ArgumentError, "Config file missing :conf:"         unless config[:conf]
           raise ArgumentError, "Config file missing :log:"          unless config[:log]
