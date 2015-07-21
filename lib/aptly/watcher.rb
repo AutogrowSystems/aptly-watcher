@@ -11,6 +11,7 @@ module Aptly
     class << self
 
       def redis
+        return nil if @config[:redis_log] == false
         @redis ||= Redis.new
       end
 
@@ -42,12 +43,16 @@ module Aptly
 
       # log into redis so we can pick it up in the DMS
       def log(level, message)
+        redis_log(level, message)          if @config[:redis_log] != false
         logger.send(level.to_sym, message) if @config[:log]       != false
+      end
+
+      def redis_log(level, message)
+        return false if redis.nil?
         timestamp = Time.now.strftime('%Y-%m-%d %H:%M:%S')
         msg       = "#{level[0].upcase}, [#{timestamp}] #{level.upcase} -- #{message}"
-        redis.lpush("aptly:watcher:log", msg)
-        redis.ltrim("aptly:watcher:log", 0, 99)
-        logger.send(level.to_sym, message)
+        redis.lpush(@config[:redis_log], msg)
+        redis.ltrim(@config[:redis_log], 0, 99)
       end
 
       # run the watcher with the given config

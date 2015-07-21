@@ -31,6 +31,7 @@ First you need to create a config file as such (we parse tildes to `ENV['HOME']`
   - stable
   - testing
 :log:          ~/watcher.log          # use '-' for STDOUT, false to disable
+:redis_log:    aptly:watcher:log      # the redis list to log into, set as false to disable
 :conf:         ~/aptly.conf           # the location of the aptly conf file
 :pidfile:      ~/aptly-watcher.pid    # the location of the aptly-watcher pidfile
 :incoming_dir: ~/incoming             # the base incoming directory
