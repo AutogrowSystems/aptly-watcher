@@ -26,15 +26,15 @@ First you need to create a config file as such (we parse tildes to `ENV['HOME']`
 
 ```yaml
 ---
-:distrib:      myapp
-:repos:
+:distrib:      myapp                  # the distribution (or the name of your app)
+:repos:                               # the repos to create and publish
   - stable
   - testing
 :log:          ~/watcher.log         # use '-' for STDOUT
-:conf:         ~/aptly.conf
-:pidfile:      ~/aptly-watcher.pid
-:incoming_dir: ~/incoming
-:user:         aptly
+:conf:         ~/aptly.conf           # the location of the aptly conf file
+:pidfile:      ~/aptly-watcher.pid    # the location of the aptly-watcher pidfile
+:incoming_dir: ~/incoming             # the base incoming directory
+:user:         aptly                  # the user to own the aptly directory after adding/publishing
 ```
 
 Then you can run the watcher with the config file:
