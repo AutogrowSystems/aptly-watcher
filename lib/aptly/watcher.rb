@@ -21,8 +21,9 @@ module Aptly
     
     # sets up the incoming directories
     def setup(config)
-      config[:repos].each do |repo|
-        repo_dir = "#{config[:incoming_dir]}/#{repo}"
+      @config = config
+      @config[:repos].each do |repo|
+        repo_dir = "#{@config[:incoming_dir]}/#{@config[:distrib]}/#{repo}"
         
         # Create the directory if it's not already there
         FileUtils.mkdir_p(repo_dir) unless File.directory?(repo_dir)
@@ -46,7 +47,7 @@ module Aptly
 
       # setup a notifier for each repo
       config[:repos].each do |repo|
-        repo_dir = "#{config[:incoming_dir]}/#{repo}"
+        repo_dir = "#{config[:incoming_dir]}/#{@config[:distrib]}/#{repo}"
         
         # watch the directory for new files
         notifier.watch(repo_dir, :close_write) do |event|
