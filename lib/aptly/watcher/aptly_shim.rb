@@ -27,12 +27,14 @@ module Aptly
       end
 
       def add(repo, path)
+        # TODO: check if the file has already been added
+        # TODO: check that the file is a Debian package
         output = `aptly repo add -remove-files=true #{config} #{repo} #{path} 2>&1`
         raise StandardError, "Failed to add #{path} to #{repo(component)}\n#{output}" unless $?.success?
       end
 
       def publish
-        system "aptly publish repo #{config} #{@name}"
+        system "aptly publish update #{config} #{@name}"
       end
 
       private
