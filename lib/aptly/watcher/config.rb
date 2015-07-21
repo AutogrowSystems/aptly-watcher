@@ -1,4 +1,5 @@
 require 'yaml'
+require 'json'
 
 module Aptly
   module Watcher
@@ -10,6 +11,7 @@ module Aptly
           config = YAML.load_file(config_file)
           valid_config!(config)
           config = parse_tildes(config)
+          config[:aptly] = parse_aptly_conf(config[:conf])
           config
         end
 
@@ -31,6 +33,13 @@ module Aptly
 
           config
         end
+
+        # Load the aptly config
+        def parse_aptly_conf(conf)
+          raise ArgumentError, "Aptly config file does not exist: #{conf}" unless File.exist? conf
+          JSON.parse(File.read(conf))
+        end
+
       end
     end
   end
