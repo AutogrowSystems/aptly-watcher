@@ -8,6 +8,7 @@ module Aptly
         def parse(config_file)
           config = YAML.load_file(config_file)
           valid_config!(config)
+          config = parse_tildes(config)
           config
         end
 
@@ -20,6 +21,14 @@ module Aptly
           raise ArgumentError, "Config file missing :incoming_dir:" unless config[:incoming_dir]
         end
 
+        # Parse any tildes into the full home path
+        def parse_tildes(config)
+          [:pidfile, :conf, :incoming_dir, :log].each do |key|
+            config[key].sub! /~/, ENV['HOME']
+          end
+
+          config
+        end
       end
     end
   end

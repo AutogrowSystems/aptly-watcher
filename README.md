@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-First you need to create a config file as such:
+First you need to create a config file as such (we parse tildes to `ENV['HOME']`):
 
 ```yaml
 ---
