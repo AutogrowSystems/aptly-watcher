@@ -45,8 +45,8 @@ This will:
 * create the repositories (if they don't exist)
 * publish the repository for the first time
 * create the folders to watch (if they don't exist)
-** `~/incoming/stable`
-** `~/incoming/testing`
+  * `~/incoming/stable`
+  * `~/incoming/testing`
 * start watching for files added to the folders
 
 Every time a file is added to one of the watched folders:
