@@ -30,7 +30,7 @@ First you need to create a config file as such (we parse tildes to `ENV['HOME']`
 :repos:                               # the repos to create and publish
   - stable
   - testing
-:log:          ~/watcher.log         # use '-' for STDOUT
+:log:          ~/watcher.log          # use '-' for STDOUT, false to disable
 :conf:         ~/aptly.conf           # the location of the aptly conf file
 :pidfile:      ~/aptly-watcher.pid    # the location of the aptly-watcher pidfile
 :incoming_dir: ~/incoming             # the base incoming directory

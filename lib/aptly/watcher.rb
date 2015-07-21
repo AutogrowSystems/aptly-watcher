@@ -16,7 +16,16 @@ module Aptly
 
       def logger
         return @logger if @logger
-        target = (@config[:log] == '-') ? STDOUT : @config[:log]
+
+        target = case @config[:log]
+        when '-'
+          STDOUT
+        when false
+          '/dev/null'
+        else
+          @config[:log]
+        end
+
         @logger ||= Logger.new target, 0, 1024000
       end
       
@@ -33,6 +42,7 @@ module Aptly
 
       # log into redis so we can pick it up in the DMS
       def log(level, message)
+        logger.send(level.to_sym, message) if @config[:log]       != false
         timestamp = Time.now.strftime('%Y-%m-%d %H:%M:%S')
         msg       = "#{level[0].upcase}, [#{timestamp}] #{level.upcase} -- #{message}"
         redis.lpush("aptly:watcher:log", msg)
