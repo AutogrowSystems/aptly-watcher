@@ -34,6 +34,7 @@ First you need to create a config file as such (we parse tildes to `ENV['HOME']`
 :conf:         ~/aptly.conf
 :pidfile:      ~/aptly-watcher.pid
 :incoming_dir: ~/incoming
+:user:         aptly
 ```
 
 Then you can run the watcher with the config file:

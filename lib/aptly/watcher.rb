@@ -53,7 +53,7 @@ module Aptly
           begin
             dispatcher.process(repo_dir, event, repo)
             log :info, "Successfully added #{event.name} to #{repo}"
-            system "chown aptly:aptly #{ENV['HOME']}/aptly -R"
+            system "chown #{config[:user]}:#{config[:user]} #{config[:aptly]['rootDir']} -R"
           rescue StandardError => e
             e.message.lines.each {|line| log :error, line.chomp }
           end
