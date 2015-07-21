@@ -10,7 +10,7 @@ module Aptly
       end
 
       def create
-        repo_list = `aptly repo list --raw`
+        repo_list = `aptly repo list #{config} --raw`
 
         # create a repo for each component
         @components.each do |repo|
@@ -21,7 +21,7 @@ module Aptly
         end
 
         # publish the repos for the first time (empty)
-        unless `aptly publish list --raw`.include? @name # avoid raising an error
+        unless `aptly publish list #{config} --raw`.include? @name # avoid raising an error
           output = `aptly publish repo #{config} #{distrib} #{component(:all)} #{@components.join(' ')} 2>&1`
           raise StandardError, "Failed to publish #{@name} for the first time\n#{output}" unless $?.success?
           Aptly::Watcher.log :info, "Published repos #{@components.join('/')} for #{@name}"
