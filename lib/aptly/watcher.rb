@@ -14,7 +14,9 @@ module Aptly
     end
 
     def logger
-      @logger ||= Logger.new config[:log], 0, 1024000
+      return @logger if @logger
+      target = (@config[:log] == '-') ? STDOUT : @config[:log]
+      @logger ||= Logger.new target, 0, 1024000
     end
     
     # sets up the incoming directories
