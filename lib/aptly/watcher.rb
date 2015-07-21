@@ -69,8 +69,8 @@ module Aptly
           notifier.watch(repo_dir, :close_write) do |event|
             begin
               dispatcher.process(repo_dir, event, repo)
-              log :info, "Successfully added #{event.name} to #{repo}"
-              system "chown #{config[:user]}:#{config[:user]} #{config[:aptly]['rootDir']} -R"
+              log :info, "Successfully added #{event.name} to #{config[:distrib]}/#{repo}"
+              system "chown #{config[:user]}:#{config[:group]} #{config[:aptly]['rootDir']} -R"
             rescue StandardError => e
               e.message.lines.each {|line| log :error, line.chomp }
             end

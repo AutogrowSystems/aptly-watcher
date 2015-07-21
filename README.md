@@ -36,6 +36,7 @@ First you need to create a config file as such (we parse tildes to `ENV['HOME']`
 :pidfile:      ~/aptly-watcher.pid    # the location of the aptly-watcher pidfile
 :incoming_dir: ~/incoming             # the base incoming directory
 :user:         aptly                  # the user to own the aptly directory after adding/publishing
+:group:        aptly                  # the group to own the aptly directory after adding/publishing
 ```
 
 Then you can run the watcher with the config file:
