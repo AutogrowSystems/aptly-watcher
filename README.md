@@ -4,6 +4,10 @@ Configures Aptly in a application centric manner, and watches a set of folders f
 
 The idea is that you setup a user on a server and push packages over SSH to the folder relating to your repo using password-less certificate based login.
 
+**Please note:** this does not publish repositories in the manner recommended by the Aptly developers, which is to publish immutable snapshots rather 
+than repositories themselves.  However, personally I found this method convoluted and too sluggish for the fast release cycles I'm used to.  It seems such
+a method would be perfect for serving mirrors however.
+
 ## Installation
 
 Add this line to your application's Gemfile:
